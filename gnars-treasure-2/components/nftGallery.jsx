@@ -17,15 +17,12 @@ export default function NFTGallery({}) {
     switch (e.target.value) {
       case "wallet":
         setWalletOrCollectionAddress("gnars.eth");
-
-        break;
-      case "collection":
-        setWalletOrCollectionAddress(
-          "0x558BFFF0D583416f7C4e380625c7865821b8E95C"
-        );
         break;
       case "connectedWallet":
         setWalletOrCollectionAddress(address);
+        break;
+      case "gnarly":
+        setWalletOrCollectionAddress("0x50aBcbF1ca3ad1826cCe9d5B69D5Bee0bA446728");
         break;
     }
     setFetchMethod(e.target.value);
@@ -33,7 +30,7 @@ export default function NFTGallery({}) {
   const fetchNFTs = async (pagekey) => {
     if (!pageKey) setIsloading(true);
     const endpoint =
-      fetchMethod == "wallet" || fetchMethod == "connectedWallet"
+      fetchMethod == "wallet" || fetchMethod == "connectedWallet" || fetchMethod == "gnarly" 
         ? "/api/getNftsForOwner"
         : "/api/getNftsForCollection";
     try {
@@ -79,7 +76,7 @@ export default function NFTGallery({}) {
     <div className={styles.nft_gallery_page}>
       <div>
         <div className={styles.fetch_selector_container}>
-          <h2 style={{ fontSize: "20px" }}>Explore NFTs by</h2>
+          <h2 style={{ fontSize: "20px" }}>Explore NFTs in</h2>
           <div className={styles.select_container}>
             <select
               defaultValue={"wallet"}
@@ -87,9 +84,10 @@ export default function NFTGallery({}) {
                 changeFetchMethod(e);
               }}
             >
-              <option value={"wallet"}>wallet</option>
-              <option value={"collection"}>collection</option>
-              <option value={"connectedWallet"}>connected wallet</option>
+              <option value={"wallet"}>Gnars Treasure</option>
+              <option value={"gnarly"}>That's Gnarly</option>
+              <option value={"connectedWallet"}>Your Wallet</option>
+              <option value={"wallet"}>Any Wallet</option>
             </select>
           </div>
         </div>
@@ -109,10 +107,10 @@ export default function NFTGallery({}) {
                 }}
                 defaultValue={process.env.ALCHEMY_NETWORK}
               >
-                <option value={"ETH_MAINNET"}>Mainnet</option>
-                <option value={"MATIC_MAINNET"}>Polygon</option>
-                <option value={"ETH_GOERLI"}>Goerli</option>
-                <option value={"MATIC_MUMBAI"}>Mumbai</option>
+                <option onSelect={() => fetchNFTs()} className={styles.button_black} value={"ETH_MAINNET"}>Mainnet</option>
+                <option onSelect={() => fetchNFTs()} className={styles.button_black} value={"ETH_GOERLI"}>Goerli</option>
+                <option onSelect={() => fetchNFTs()} className={styles.button_black} value={"MATIC_MUMBAI"}>Mumbai</option>
+                <option onSelect={() => fetchNFTs()} className={styles.button_black} value={"MATIC_MAINNET"}>Polygon</option>
               </select>
             </div>
             <div onClick={() => fetchNFTs()} className={styles.button_black}>
@@ -184,7 +182,7 @@ function NftCard({ nft }) {
       <div className={styles.image_container}>
         {nft.format == "mp4" ? (
           <video src={nft.media} controls>
-            Your browser does not support the video tag.
+            Your browser is old as fuck.
           </video>
         ) : (
           <img src={nft.media}></img>
